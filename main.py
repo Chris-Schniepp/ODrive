@@ -15,16 +15,19 @@ def run_odrive_with_joystick():
 
 if __name__ == '__main__':
     axis.clear_errors()
+    axis.calibrate_encoder()
     axis.calibrate()
     print(axis.get_raw_pos())
     print(axis.get_vel())
 
-    right_end = 33417
-    left_end = -72046
+    right_end = 61000
+    left_end = -35250
 
     right_end = right_end ^ left_end
     left_end = right_end ^ left_end
     right_end = right_end ^ left_end
+
+    axis.set_vel_limit(25000)
 
     # axis.set_curr_limit(20)
     # axis.set_current(15)
@@ -33,12 +36,17 @@ if __name__ == '__main__':
         while True:
             pos = axis.get_raw_pos()
 
-            if pos > right_end and joystick.get_axis('x') > 0:
+            if pos > right_end and joystick.get_axis('x') > .15:
                 print("right")
-                axis.set_pos(pos-1000)
-            elif pos < left_end and joystick.get_axis('x') < 0:
+                axis.set_pos(pos-(2500*joystick.get_axis('x')))
+            elif pos < left_end and joystick.get_axis('x') < -.15:
                 print("left")
-                axis.set_pos(pos + 1000)
+                axis.set_pos(pos + (2500*-joystick.get_axis('x')))
+
+            if joystick.button_combo_check([0]):
+                print(axis.get_raw_pos())
+                print(axis.get_vel())
+
 
 
     except KeyboardInterrupt:
