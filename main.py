@@ -1,3 +1,5 @@
+from time import sleep
+
 import odrive
 import ODrive_Ease_Lib
 
@@ -15,7 +17,6 @@ def run_odrive_with_joystick():
 
 if __name__ == '__main__':
     axis.clear_errors()
-    axis.calibrate_encoder()
     axis.calibrate()
     print(axis.get_raw_pos())
     print(axis.get_vel())
@@ -29,23 +30,33 @@ if __name__ == '__main__':
 
     axis.set_vel_limit(25000)
 
+    switch = True
+
     # axis.set_curr_limit(20)
     # axis.set_current(15)
 
     try:
         while True:
+
             pos = axis.get_raw_pos()
 
             if pos > right_end and joystick.get_axis('x') > .15:
-                print("right")
-                axis.set_pos(pos-(2500*joystick.get_axis('x')))
+                if switch:
+                    print("right")
+                    switch = False
+                axis.set_pos(pos-(3200*joystick.get_axis('x')))
             elif pos < left_end and joystick.get_axis('x') < -.15:
-                print("left")
-                axis.set_pos(pos + (2500*-joystick.get_axis('x')))
+                if not switch:
+                    print("left")
+                    switch = True
+                axis.set_pos(pos + (3200*-joystick.get_axis('x')))
 
             if joystick.button_combo_check([0]):
-                print(axis.get_raw_pos())
-                print(axis.get_vel())
+                print("position: ", axis.get_raw_pos())
+                print("position gain: ", axis.get_pos_gain())
+                print("velocity: ", axis.get_vel())
+                print("velocity gain: ", axis.get_vel_gain())
+                sleep(.2)
 
 
 
