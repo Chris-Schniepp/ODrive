@@ -202,7 +202,7 @@ class ODrive_Axis(object):
         return True
 
     # homes the motor by having it move towards one side with a constant velocity. Once it can no longer move, it considers this its home
-    # The direction can be specified either by the sign of the velocty passed in or through the direction parameter
+    # The direction can be specified either by the sign of the velocity passed in or through the direction parameter
     # If the length of the track is known, it can be passed in. If this is done, after moving to one side, the motor will move to the other to find if the homing was successful.
     def home_with_vel(self, vel, length=-1, direction=1):
         self.set_vel(vel * -1 * direction)

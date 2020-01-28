@@ -21,14 +21,17 @@ if __name__ == '__main__':
     print(axis.get_raw_pos())
     print(axis.get_vel())
 
-    right_end = 61000
-    left_end = -35250
+    right_end = 51000
+    left_end = -40250
 
     right_end = right_end ^ left_end
     left_end = right_end ^ left_end
     right_end = right_end ^ left_end
 
     axis.set_vel_limit(25000)
+
+    # axis.set_pos_gain(30)
+    # axis.set_vel_gain(.0002)
 
     switch = True
 
@@ -44,12 +47,16 @@ if __name__ == '__main__':
                 if switch:
                     print("right")
                     switch = False
-                axis.set_pos(pos-(3200*joystick.get_axis('x')))
+                axis.set_vel(-18000)
+                # axis.set_pos(pos-(1000*joystick.get_axis('x')))
             elif pos < left_end and joystick.get_axis('x') < -.15:
                 if not switch:
                     print("left")
                     switch = True
-                axis.set_pos(pos + (3200*-joystick.get_axis('x')))
+                axis.set_vel(18000)
+                # axis.set_pos(pos + (1000*-joystick.get_axis('x')))
+            else:
+                axis.set_vel(0)
 
             if joystick.button_combo_check([0]):
                 print("position: ", axis.get_raw_pos())
