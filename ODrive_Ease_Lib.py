@@ -216,7 +216,7 @@ class ODrive_Axis(object):
 
         self.set_zero(self.get_raw_pos())
         print(self.get_pos())
-
+        print("length: ", length)
         time.sleep(1)
 
         if not length == -1:
