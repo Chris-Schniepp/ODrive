@@ -18,17 +18,17 @@ def run_odrive_with_joystick():
 if __name__ == '__main__':
     axis.clear_errors()
     axis.calibrate()
-    axis.home_with_vel(-5000, 60)
-    print(axis.get_raw_pos())
-    print(axis.get_vel())
+    axis.home_with_vel(-6000, -112844.0)
+    middle = (axis.zero - axis.get_pos())/2
+
+    print(middle)
 
     full_length = 112814.0
-    right_end = 101000
-    left_end = -101000
 
-    right_end = right_end ^ left_end
-    left_end = right_end ^ left_end
-    right_end = right_end ^ left_end
+    # god tier code to switch variables if needed
+    # right_end = right_end ^ left_end
+    # left_end = right_end ^ left_end
+    # right_end = right_end ^ left_end
 
     axis.set_vel_limit(25000)
 
@@ -45,13 +45,13 @@ if __name__ == '__main__':
 
             pos = axis.get_raw_pos()
 
-            if pos > right_end and joystick.get_axis('x') > .15:
+            if pos > -(full_length-1000) and joystick.get_axis('x') > .15:
                 if switch:
                     print("right")
                     switch = False
                 axis.set_vel(-18000*joystick.get_axis('x'))
                 # axis.set_pos(pos-(1000*joystick.get_axis('x')))
-            elif pos < left_end and joystick.get_axis('x') < -.15:
+            elif pos < (axis.zero + 1000) and joystick.get_axis('x') < -.15:
                 if not switch:
                     print("left")
                     switch = True
@@ -67,7 +67,12 @@ if __name__ == '__main__':
                 print("velocity gain: ", axis.get_vel_gain())
                 sleep(.2)
 
+            if joystick.button_combo_check([3]):
+                print("Oof")
+                axis.set_pos_trap(-middle)
+
 
 
     except KeyboardInterrupt:
+        axis.idle()
         quit()

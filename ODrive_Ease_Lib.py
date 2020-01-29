@@ -221,7 +221,7 @@ class ODrive_Axis(object):
 
         if not length == -1:
             self.set_vel(vel * 1 * direction)
-            time.sleep(1)
+            time.sleep(10)
             while self.is_busy():
                 pass
 
@@ -278,6 +278,8 @@ class ODrive_Axis(object):
         self.axis.controller.error = 0
         #There is also sensorless estimator errors but those are super rare and I am not sure what the object field is called to ima just leave it
 
+    def idle(self):
+        self.axis.requested_state = AXIS_STATE_IDLE
 
 class double_ODrive(object):
 
