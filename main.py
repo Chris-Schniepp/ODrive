@@ -47,13 +47,13 @@ if __name__ == '__main__':
                 if switch:
                     print("right")
                     switch = False
-                axis.set_vel(-65000*joystick.get_axis('x'))
+                axis.set_vel(-125000*joystick.get_axis('x'))
                 # axis.set_pos(pos-(1000*joystick.get_axis('x')))
             elif pos < -6000 and joystick.get_axis('x') < -.15 and not tracking:
                 if not switch:
                     print("left")
                     switch = True
-                axis.set_vel(65000*-joystick.get_axis('x'))
+                axis.set_vel(125000*-joystick.get_axis('x'))
                 # axis.set_pos(pos + (1000*-joystick.get_axis('x')))
             else:
                 axis.set_vel(0)
