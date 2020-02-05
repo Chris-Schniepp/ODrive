@@ -11,7 +11,7 @@ joystick = Joystick(0, False)
 OD = odrive.find_any()
 axis_1 = ODrive_Ease_Lib.ODrive_Axis(OD.axis1)
 axis_0 = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
-both_axises = ODrive_Ease_Lib.double_ODrive(OD.axis1, OD.axis0)
+
 
 
 if __name__ == '__main__':
@@ -19,8 +19,10 @@ if __name__ == '__main__':
     axis_0.clear_errors()
     axis_1.set_curr_limit(30)
     axis_0.set_curr_limit(30)
-    both_axises.calibrate()
-    both_axises.home_with_vel(-10000, -112844.0)
+    axis_0.calibrate()
+    axis_1.calibrate()
+    axis_0.home_with_vel(-10000, -112844.0)
+    axis_1.home_with_vel(-10000, -112844.0)
     print(axis_1.zero, " ", axis_0.zero)
     print(axis_1.get_pos(), " ", axis_0.get_pos())
     middle = (0 - axis_1.get_pos())/2
