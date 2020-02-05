@@ -49,14 +49,14 @@ if __name__ == '__main__':
             pos = axis_1.get_pos()
             pos1 = axis_0.get_pos()
 
-            if pos > -(full_length-15000) and joystick.get_axis('x') > .15:
+            if pos > -(full_length-15000) and joystick.get_axis('x') > .15 and joystick.get_axis('y') < -.15:
                 if switch:
                     print("right")
                     switch = False
                 axis_1.set_vel(-vel_speed*joystick.get_axis('x'))
                 axis_0.set_vel(-vel_speed*joystick.get_axis('y'))
                 # axis_1.set_pos(pos-(1000*joystick.get_axis_1('x')))
-            elif pos < -15000 and joystick.get_axis('x') < -.15:
+            elif pos < -15000 and joystick.get_axis('x') < -.15 and joystick.get_axis('y') > .15:
                 if not switch:
                     print("left")
                     switch = True
