@@ -11,6 +11,7 @@ OD = odrive.find_any()
 axis_1 = ODrive_Ease_Lib.ODrive_Axis(OD.axis1)
 axis_0 = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
 
+
 def run_x_axis():
     pos = axis_1.get_pos()
 
@@ -36,15 +37,19 @@ def run_y_axis():
     else:
         axis_0.set_vel(0)
 
-def trajectory_mode(location):
+
+def trajectory_mode(location1, location2):
     """
     blocking function to set motors at a specific location
     :param location: set point on track one wants the motors to go to
     :return: none
     """
-    while abs(axis_1.get_pos() - -middle_x) >= 50:
-        axis_1.set_pos_trap(-middle_x)
+    while abs(axis_1.get_pos() - location1) >= 50 and abs(axis_0.get_pos() - location2) >= 50:
+        axis_0.set_pos_trap(location2)
+        axis_1.set_pos_trap(location1)
         axis_1.get_pos()
+        axis_0.get_pos()
+
 
 if __name__ == '__main__':
     axis_1.clear_errors()
@@ -55,10 +60,12 @@ if __name__ == '__main__':
     axis_1.home_with_vel(-10000, -1)
     print(axis_1.zero, " ", axis_0.zero)
     print(axis_1.get_pos(), " ", axis_0.get_pos())
-    middle_x = (0 - axis_1.get_pos()) / 2
-    middle_y = (0 - axis_0.get_pos()) / 2
 
-    full_length = 112816
+    full_length = 112816  # axis1
+    middle_x = full_length / 2
+    middle_y = full_length / 2
+
+
 
     # god tier code to switch variables if needed
     # right_end = right_end ^ left_end
@@ -69,29 +76,19 @@ if __name__ == '__main__':
     axis_0.set_vel_limit(250000)
     vel_speed = 50000
 
-    # axis_1.set_pos_gain(30)
-    # axis_1.set_vel_gain(.0002)
-
-    switch = True
-
     try:
         while True:
 
             run_x_axis()
             run_y_axis()
 
-            if joystick.button_combo_check([6]):
+            if joystick.button_combo_check([3]):
+                trajectory_mode(-middle_x, -middle_y)
+
+            if joystick.button_combo_check([0]):
                 print("position: ", axis_1.get_pos(), " y: ", axis_0.get_pos())
                 print("velocity: ", axis_1.get_vel(), "y: ", axis_0.get_vel())
                 sleep(.2)
-
-            if joystick.button_combo_check([3]):
-                print("Oof")
-                while abs(axis_1.get_pos() - -middle_x) >= 50:
-                    axis_1.set_pos_trap(-middle_x)
-                    axis_1.get_pos()
-                    print("tracking...")
-
 
     except KeyboardInterrupt:
         axis_1.idle()
