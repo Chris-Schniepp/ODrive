@@ -8,7 +8,7 @@ from pidev.Joystick import Joystick
 joystick = Joystick(0, False)
 
 OD = odrive.find_any()
-axis = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
+axis = ODrive_Ease_Lib.ODrive_Axis(OD.axis1)
 
 
 if __name__ == '__main__':

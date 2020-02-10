@@ -44,7 +44,7 @@ def trajectory_mode(location1, location2):
     :param location: set point on track one wants the motors to go to
     :return: none
     """
-    while abs(axis_1.get_pos() - location1) >= 50 and abs(axis_0.get_pos() - location2) >= 50:
+    while abs(axis_1.get_pos() - location1) >= 10 or abs(axis_0.get_pos() - location2) >= 10:
         axis_0.set_pos_trap(location2)
         axis_1.set_pos_trap(location1)
         axis_1.get_pos()
@@ -62,10 +62,8 @@ if __name__ == '__main__':
     print(axis_1.get_pos(), " ", axis_0.get_pos())
 
     full_length = 112816  # axis1
-    middle_x = full_length / 2
+    middle_x = full_length / 2 - 1000
     middle_y = full_length / 2
-
-
 
     # god tier code to switch variables if needed
     # right_end = right_end ^ left_end
@@ -86,8 +84,8 @@ if __name__ == '__main__':
                 trajectory_mode(-middle_x, -middle_y)
 
             if joystick.button_combo_check([0]):
-                print("position: ", axis_1.get_pos(), " y: ", axis_0.get_pos())
-                print("velocity: ", axis_1.get_vel(), "y: ", axis_0.get_vel())
+                print("position: ", axis_1.get_pos(), "  y: ", axis_0.get_pos())
+                print("velocity: ", axis_1.get_vel(), " y: ", axis_0.get_vel())
                 sleep(.2)
 
     except KeyboardInterrupt:
