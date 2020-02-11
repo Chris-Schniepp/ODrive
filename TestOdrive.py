@@ -14,12 +14,13 @@ axis = ODrive_Ease_Lib.ODrive_Axis(OD.axis1)
 if __name__ == '__main__':
     axis.clear_errors()
     axis.calibrate()
-    axis.home_with_vel(-10000, -1.0)
+    axis.home_with_vel(-5000, -1.0)
     print(axis.zero)
     print(axis.get_pos())
     middle = (0 - axis.get_pos())/2
 
     full_length = 112816
+    restricted_length = 1
 
     axis.set_vel_limit(250000)
 
@@ -30,13 +31,13 @@ if __name__ == '__main__':
 
             pos = axis.get_pos()
 
-            if pos > -(full_length-15000) and joystick.get_axis('y') < -.15:
+            if pos > -(full_length-restricted_length) and joystick.get_axis('y') < -.15:
                 if switch:
                     print("right")
                     switch = False
                 axis.set_vel(50000*joystick.get_axis('y'))
 
-            elif pos < -15000 and joystick.get_axis('y') > .15:
+            elif pos < -restricted_length and joystick.get_axis('y') > .15:
                 if not switch:
                     print("left")
                     switch = True

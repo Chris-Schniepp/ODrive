@@ -62,6 +62,9 @@ if __name__ == '__main__':
     print(axis_1.zero, " ", axis_0.zero)
     print(axis_1.get_pos(), " ", axis_0.get_pos())
 
+    axis_0.set_curr_limit(30)
+    axis_1.set_curr_limit(30)
+
     full_length = 112816  # axis1
     middle_x = full_length / 2 - 2000
     middle_y = full_length / 2
@@ -73,7 +76,7 @@ if __name__ == '__main__':
 
     axis_1.set_vel_limit(250000)
     axis_0.set_vel_limit(250000)
-    vel_speed = 50000
+    vel_speed = 100000
 
     try:
         while True:
