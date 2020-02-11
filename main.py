@@ -40,8 +40,9 @@ def run_y_axis():
 
 def trajectory_mode(location1, location2):
     """
-    blocking function to set motors at a specific location
-    :param location: set point on track one wants the motors to go to
+    blocking function that sets the motors to a specific location
+    :param location1: set point on the track one wants axis1 to go to
+    :param location2: set point on the track one wants axis0 to go to
     :return: none
     """
     while abs(axis_1.get_pos() - location1) >= 10 or abs(axis_0.get_pos() - location2) >= 10:
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     print(axis_1.get_pos(), " ", axis_0.get_pos())
 
     full_length = 112816  # axis1
-    middle_x = full_length / 2 - 1000
+    middle_x = full_length / 2 - 2000
     middle_y = full_length / 2
 
     # god tier code to switch variables if needed
