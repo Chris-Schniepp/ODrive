@@ -1,3 +1,8 @@
+"""
+Method to test Odrive with a joystick
+currently being used for tests with Tippy Maze set up
+"""
+
 from time import sleep
 
 import odrive
@@ -14,8 +19,10 @@ axis = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
 if __name__ == '__main__':
     axis.clear_errors()
     axis.calibrate()
+
+    # direction of homing determined by the way the ODrive is connected and subject to change
     axis.home_with_vel(7000, -1.0)
-    print(axis.zero)
+    print(axis.zero) # prints the location of the 0 in the raw position of the ODrive
     print(axis.get_pos(), " ", axis.get_raw_pos())
 
     axis.set_curr_limit(30)
@@ -24,7 +31,9 @@ if __name__ == '__main__':
     middle = full_length/2
     restricted_length = 17000
 
-    axis.set_vel_limit(370000)
+    # sets the maximum speed the ODrive can go, default set to 20,000
+    axis.set_vel_limit(405000)
+    vel_speed = 400000
 
     switch = True
 
@@ -37,13 +46,13 @@ if __name__ == '__main__':
                 if switch:
                     print("up")
                     switch = False
-                axis.set_vel(350000*-joystick.get_axis('y'))
+                axis.set_vel(vel_speed*-joystick.get_axis('y'))
 
             elif pos > restricted_length and joystick.get_axis('y') > .15:
                 if not switch:
                     print("down")
                     switch = True
-                axis.set_vel(350000*-joystick.get_axis('y'))
+                axis.set_vel(vel_speed*-joystick.get_axis('y'))
 
             else:
                 axis.set_vel(0)
@@ -51,6 +60,7 @@ if __name__ == '__main__':
             if joystick.button_combo_check([6]):
                 print("position: ", axis.get_pos())
                 print("velocity: ", axis.get_vel())
+                print("current: ", axis.get_current())
                 sleep(.2)
 
             if joystick.button_combo_check([3]):

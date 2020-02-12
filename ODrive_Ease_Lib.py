@@ -120,7 +120,7 @@ class ODrive_Axis(object):
         self.axis.controller.current_setpoint = curr
 
     def get_current(self):
-        return self.axis.controller.measure.current
+        return self.axis.motor.current_control.Iq_measured
 
     # returns the velocity measured from the encoder
     def get_vel(self):
@@ -282,6 +282,10 @@ class ODrive_Axis(object):
         #There is also sensorless estimator errors but those are super rare and I am not sure what the object field is called to ima just leave it
 
     def idle(self):
+        """
+        function to put the ODrive into the idle state where it can be moved freely
+        :return: None
+        """
         self.axis.requested_state = AXIS_STATE_IDLE
 
 class double_ODrive(object):

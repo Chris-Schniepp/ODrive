@@ -90,6 +90,7 @@ if __name__ == '__main__':
             if joystick.button_combo_check([0]):
                 print("position: ", axis_1.get_pos(), "  y: ", axis_0.get_pos())
                 print("velocity: ", axis_1.get_vel(), " y: ", axis_0.get_vel())
+                print("current: ", axis_1.get_current(), " y: ", axis_0.get_current())
                 sleep(.2)
 
     except KeyboardInterrupt:
