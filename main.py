@@ -74,6 +74,7 @@ if __name__ == '__main__':
     # left_end = right_end ^ left_end
     # right_end = right_end ^ left_end
 
+    # sets the maximum speed the ODrive can go, default set to 20,000
     axis_1.set_vel_limit(250000)
     axis_0.set_vel_limit(250000)
     vel_speed = 100000
