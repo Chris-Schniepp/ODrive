@@ -120,7 +120,7 @@ class ODrive_Axis(object):
         self.axis.controller.current_setpoint = curr
 
     def get_current(self):
-        return self.axis.controller.meas
+        return self.axis.controller.measure.current
 
     # returns the velocity measured from the encoder
     def get_vel(self):
