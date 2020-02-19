@@ -27,15 +27,15 @@ if __name__ == '__main__':
     print(axis.zero) # prints the location of the 0 in the raw position of the ODrive
     print(axis.get_pos(), " ", axis.get_raw_pos())
 
-    axis.set_curr_limit(30)
+    axis.set_curr_limit(40)
 
     full_length = 187682
     middle = full_length/2
     restricted_length = 17000
 
     # sets the maximum speed the ODrive can go, default set to 20,000
-    axis.set_vel_limit(480000)
-    vel_speed = 470000
+    axis.set_vel_limit(510000)
+    vel_speed = 480000
 
     switch = True
 
