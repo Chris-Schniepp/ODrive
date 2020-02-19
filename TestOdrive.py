@@ -10,8 +10,10 @@ import ODrive_Ease_Lib
 
 from pidev.Joystick import Joystick
 
+# declaring joystick
 joystick = Joystick(0, False)
 
+# finding the odrive and setting the axis
 OD = odrive.find_any()
 axis = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
 
@@ -32,8 +34,8 @@ if __name__ == '__main__':
     restricted_length = 17000
 
     # sets the maximum speed the ODrive can go, default set to 20,000
-    axis.set_vel_limit(408000)
-    vel_speed = 390000
+    axis.set_vel_limit(480000)
+    vel_speed = 470000
 
     switch = True
 
@@ -42,14 +44,16 @@ if __name__ == '__main__':
 
             pos = axis.get_pos()
 
-            if pos < (full_length - restricted_length) and joystick.get_axis('y') < -.15:
+            if pos < (full_length - restricted_length) and joystick.get_axis('y') < -.05:
                 if switch:
+                    sleep(.05)
                     print("up")
                     switch = False
                 axis.set_vel(vel_speed*-joystick.get_axis('y'))
 
-            elif pos > restricted_length and joystick.get_axis('y') > .15:
+            elif pos > restricted_length and joystick.get_axis('y') > .05:
                 if not switch:
+                    sleep(.05)
                     print("down")
                     switch = True
                 axis.set_vel(vel_speed*-joystick.get_axis('y'))

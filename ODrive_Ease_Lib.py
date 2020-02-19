@@ -119,6 +119,7 @@ class ODrive_Axis(object):
         self.axis.controller.config.control_mode = CTRL_MODE_CURRENT_CONTROL
         self.axis.controller.current_setpoint = curr
 
+    # returns the measured current value
     def get_current(self):
         return self.axis.motor.current_control.Iq_measured
 
