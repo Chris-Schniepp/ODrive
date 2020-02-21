@@ -57,6 +57,9 @@ class ODrive_Axis(object):
                 print("could not calibrate, try rebooting odrive")
                 return False
 
+    def cpr(self, cpr_count):
+        self.axis.encoder.config.cpr = cpr_count
+
     # checks if the motor is claibrated and the encoder is ready
     def is_calibrated(self):
         return self.axis.motor.is_calibrated and self.axis.encoder.is_ready

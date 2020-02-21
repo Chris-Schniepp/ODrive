@@ -1,8 +1,3 @@
-"""
-Method to test Odrive with a joystick
-currently being used for tests with Tippy Maze set up
-"""
-
 from time import sleep
 
 import odrive
@@ -10,32 +5,26 @@ import ODrive_Ease_Lib
 
 from pidev.Joystick import Joystick
 
-# declaring joystick
 joystick = Joystick(0, False)
 
-# finding the odrive and setting the axis
 OD = odrive.find_any()
-axis = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
+axis = ODrive_Ease_Lib.ODrive_Axis(OD.axis1)
 
 
 if __name__ == '__main__':
     axis.clear_errors()
+    axis.cpr(4096)
     axis.calibrate()
+    axis.home_with_vel(-5000, -1.0)
+    print(axis.zero)
+    print(axis.get_pos())
 
-    # direction of homing determined by the way the ODrive is connected and subject to change
-    axis.home_with_vel(7000, -1.0)
-    print(axis.zero) # prints the location of the 0 in the raw position of the ODrive
-    print(axis.get_pos(), " ", axis.get_raw_pos())
+    # cpr encoder 8096 length: 112816
+    full_length = 56427
+    restricted_length = 10000
+    middle = full_length / 2
 
-    axis.set_curr_limit(28)
-
-    full_length = 187682
-    middle = full_length/2
-    restricted_length = 20000
-
-    # sets the maximum speed the ODrive can go, default set to 20,000
-    axis.set_vel_limit(495000)
-    vel_speed = 490000
+    axis.set_vel_limit(250000)
 
     switch = True
 
@@ -44,40 +33,34 @@ if __name__ == '__main__':
 
             pos = axis.get_pos()
 
-            if pos < (full_length - restricted_length) and joystick.get_axis('y') < -.05:
+            if pos > -(full_length-restricted_length) and joystick.get_axis('y') < -.05:
                 if switch:
-                    sleep(.05)
-                    print("up")
+                    print("right")
                     switch = False
-                axis.set_vel(vel_speed*-joystick.get_axis('y'))
+                axis.set_vel(50000*joystick.get_axis('y'))
 
-            elif pos > restricted_length and joystick.get_axis('y') > .05:
+            elif pos < -restricted_length and joystick.get_axis('y') > .05:
                 if not switch:
-                    sleep(.05)
-                    print("down")
+                    print("left")
                     switch = True
-                axis.set_vel(vel_speed*-joystick.get_axis('y'))
+                axis.set_vel(50000*joystick.get_axis('y'))
 
             else:
                 axis.set_vel(0)
 
-            """
             if joystick.button_combo_check([6]):
                 print("position: ", axis.get_pos())
                 print("velocity: ", axis.get_vel())
-                print("current: ", axis.get_current())
                 sleep(.2)
 
             if joystick.button_combo_check([3]):
                 print("Oof")
-                while abs(axis.get_pos() - middle) >= 10:
-                    axis.set_pos_trap(middle)
+                while abs(axis.get_pos() - -middle) >= 50:
+                    axis.set_pos_trap(-middle)
                     axis.get_pos()
                     print("tracking...")
 
-            if joystick.button_combo_check([10]):
-                axis.set_pos(50000)
-            """
+
 
     except KeyboardInterrupt:
         axis.idle()
