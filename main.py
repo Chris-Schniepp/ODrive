@@ -15,10 +15,10 @@ axis_0 = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
 def run_x_axis():
     pos = axis_1.get_pos()
 
-    if pos > -(full_length - 15000) and joystick.get_axis('x') > .15:
+    if pos > -(full_length - 15000) and joystick.get_axis('x') > .05:
         axis_1.set_vel(-vel_speed * joystick.get_axis('x'))
 
-    elif pos < -15000 and joystick.get_axis('x') < -.15:
+    elif pos < -15000 and joystick.get_axis('x') < -.05:
         axis_1.set_vel(vel_speed * -joystick.get_axis('x'))
 
     else:
@@ -28,10 +28,10 @@ def run_x_axis():
 def run_y_axis():
     pos = axis_0.get_pos()
 
-    if pos > -(full_length - 15000) and joystick.get_axis('y') < -.15:
+    if pos > -(full_length - 15000) and joystick.get_axis('y') < -.05:
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
-    elif pos < -15000 and joystick.get_axis('y') > .15:
+    elif pos < -15000 and joystick.get_axis('y') > .05:
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
     else:
@@ -50,6 +50,19 @@ def trajectory_mode(location1, location2):
         axis_1.set_pos_trap(location1)
         axis_1.get_pos()
         axis_0.get_pos()
+
+
+def home(length_of_track):
+
+    middle = length_of_track / 2
+
+    axis_0.home_with_vel(-10000, -1)
+    while abs(axis_0.get_pos() - middle) >= 10:
+        axis_0.set_pos_trap(middle)
+
+    axis_1.home_with_vel(-10000, -1)
+    while abs(axis_1.get_pos() - middle) >= 10:
+        axis_0.set_pos_trap(middle)
 
 
 if __name__ == '__main__':
