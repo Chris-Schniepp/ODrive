@@ -23,19 +23,20 @@ if __name__ == '__main__':
     axis.calibrate()
 
     # direction of homing determined by the way the ODrive is connected and subject to change
-    axis.home_with_vel(7000, -1.0)
+    axis.home_with_vel(5000, -1.0)
     print(axis.zero) # prints the location of the 0 in the raw position of the ODrive
     print(axis.get_pos(), " ", axis.get_raw_pos())
 
     axis.set_curr_limit(28)
 
-    full_length = 187682
+    #previous value 187682
+    full_length = 200000
     middle = full_length/2
     restricted_length = 20000
 
     # sets the maximum speed the ODrive can go, default set to 20,000
     axis.set_vel_limit(495000)
-    vel_speed = 490000
+    vel_speed = 50000
 
     switch = True
 
@@ -51,7 +52,7 @@ if __name__ == '__main__':
                     switch = False
                 axis.set_vel(vel_speed*-joystick.get_axis('y'))
 
-            elif pos > restricted_length and joystick.get_axis('y') > .05:
+            elif pos > restricted_length - 200000 and joystick.get_axis('y') > .05:
                 if not switch:
                     sleep(.05)
                     print("down")
@@ -61,9 +62,9 @@ if __name__ == '__main__':
             else:
                 axis.set_vel(0)
 
-            """
+
             if joystick.button_combo_check([6]):
-                print("position: ", axis.get_pos())
+                print("position: ", axis.get_pos(), " ", axis.get_raw_pos())
                 print("velocity: ", axis.get_vel())
                 print("current: ", axis.get_current())
                 sleep(.2)
@@ -77,7 +78,7 @@ if __name__ == '__main__':
 
             if joystick.button_combo_check([10]):
                 axis.set_pos(50000)
-            """
+
 
     except KeyboardInterrupt:
         axis.idle()
