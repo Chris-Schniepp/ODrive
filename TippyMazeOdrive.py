@@ -30,13 +30,13 @@ if __name__ == '__main__':
     axis.set_curr_limit(28)
 
     #previous value 187682
-    full_length = 200000
+    full_length = 130000
     middle = full_length/2
     restricted_length = 20000
 
     # sets the maximum speed the ODrive can go, default set to 20,000
     axis.set_vel_limit(495000)
-    vel_speed = 50000
+    vel_speed = 100000
 
     switch = True
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
                     switch = False
                 axis.set_vel(vel_speed*-joystick.get_axis('y'))
 
-            elif pos > restricted_length - 200000 and joystick.get_axis('y') > .05:
+            elif pos > restricted_length and joystick.get_axis('y') > .05:
                 if not switch:
                     sleep(.05)
                     print("down")

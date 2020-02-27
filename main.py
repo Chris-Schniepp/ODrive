@@ -11,14 +11,15 @@ OD = odrive.find_any()
 axis_1 = ODrive_Ease_Lib.ODrive_Axis(OD.axis1)
 axis_0 = ODrive_Ease_Lib.ODrive_Axis(OD.axis0)
 
+restricted_length = 20000
 
 def run_x_axis():
     pos = axis_1.get_pos()
 
-    if pos > -(full_length - 15000) and joystick.get_axis('x') > .05:
-        axis_1.set_vel(-vel_speed * joystick.get_axis('x'))
+    if pos < (full_length - restricted_length) and joystick.get_axis('x') < -.05:
+        axis_1.set_vel(vel_speed * -joystick.get_axis('x'))
 
-    elif pos < -15000 and joystick.get_axis('x') < -.05:
+    elif pos > restricted_length and joystick.get_axis('x') > .05:
         axis_1.set_vel(vel_speed * -joystick.get_axis('x'))
 
     else:
@@ -28,10 +29,12 @@ def run_x_axis():
 def run_y_axis():
     pos = axis_0.get_pos()
 
-    if pos > -(full_length - 15000) and joystick.get_axis('y') < -.05:
+    if pos < (full_length - restricted_length) and joystick.get_axis('y') < -.05:
+
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
-    elif pos < -15000 and joystick.get_axis('y') > .05:
+    elif pos > restricted_length and joystick.get_axis('y') > .05:
+
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
     else:
@@ -56,13 +59,15 @@ def home(length_of_track):
 
     middle = length_of_track / 2
 
-    axis_0.home_with_vel(-10000, -1)
-    while abs(axis_0.get_pos() - middle) >= 10:
+    axis_0.home_with_vel(5000, -1)
+    while abs(axis_0.get_pos() - (middle-13000)) >= 10:
+        print("tracking y")
         axis_0.set_pos_trap(middle)
 
-    axis_1.home_with_vel(-10000, -1)
+    axis_1.home_with_vel(5000, -1)
     while abs(axis_1.get_pos() - middle) >= 10:
-        axis_0.set_pos_trap(middle)
+        print("tracking x")
+        axis_1.set_pos_trap(middle)
 
 
 if __name__ == '__main__':
@@ -70,8 +75,7 @@ if __name__ == '__main__':
     axis_0.clear_errors()
     axis_0.calibrate()
     axis_1.calibrate()
-    axis_0.home_with_vel(-10000, -1)
-    axis_1.home_with_vel(-10000, -1)
+    home(130000)
     print(axis_1.zero, " ", axis_0.zero)
     print(axis_1.get_pos(), " ", axis_0.get_pos())
 
@@ -79,8 +83,8 @@ if __name__ == '__main__':
     axis_1.set_curr_limit(30)
 
     full_length = 112816  # axis1
-    middle_x = full_length / 2 - 2000
-    middle_y = full_length / 2
+    middle_x = full_length / 2
+    middle_y = full_length / 2 - 13000
 
     # god tier code to switch variables if needed
     # right_end = right_end ^ left_end
@@ -90,7 +94,7 @@ if __name__ == '__main__':
     # sets the maximum speed the ODrive can go, default set to 20,000
     axis_1.set_vel_limit(250000)
     axis_0.set_vel_limit(250000)
-    vel_speed = 100000
+    vel_speed = 150000
 
     try:
         while True:
@@ -99,7 +103,7 @@ if __name__ == '__main__':
             run_y_axis()
 
             if joystick.button_combo_check([3]):
-                trajectory_mode(-middle_x, -middle_y)
+                trajectory_mode(middle_x, middle_y)
 
             if joystick.button_combo_check([0]):
                 print("position: ", axis_1.get_pos(), "  y: ", axis_0.get_pos())
