@@ -5,7 +5,7 @@ import ODrive_Ease_Lib
 
 from pidev.Joystick import Joystick
 
-joystick = Joystick(0, False)
+joystick = Joystick(0, True)
 
 OD = odrive.find_any()
 axis_1 = ODrive_Ease_Lib.ODrive_Axis(OD.axis1)
@@ -30,11 +30,9 @@ def run_y_axis():
     pos = axis_0.get_pos()
 
     if pos > restricted_length and joystick.get_axis('y') < -.05:
-
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
     elif pos < (full_length - restricted_length) and joystick.get_axis('y') > .05:
-
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
     else:

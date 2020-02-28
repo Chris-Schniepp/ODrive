@@ -1,0 +1,8 @@
+from pidev.Joystick import Joystick
+
+joystick = Joystick(0, False)
+
+
+if __name__ == '__main__':
+    while True:
+        print(joystick.get_axis('x'))
