@@ -29,11 +29,11 @@ def run_x_axis():
 def run_y_axis():
     pos = axis_0.get_pos()
 
-    if pos < (full_length - restricted_length) and joystick.get_axis('y') < -.05:
+    if pos > restricted_length and joystick.get_axis('y') < -.05:
 
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
-    elif pos > restricted_length and joystick.get_axis('y') > .05:
+    elif pos < (full_length - restricted_length) and joystick.get_axis('y') > .05:
 
         axis_0.set_vel(vel_speed * joystick.get_axis('y'))
 
@@ -59,13 +59,13 @@ def home(length_of_track):
 
     middle = length_of_track / 2
 
-    axis_0.home_with_vel(5000, -1)
-    while abs(axis_0.get_pos() - (middle-13000)) >= 10:
+    axis_0.home_with_vel(10000, -1)
+    while abs(axis_0.get_pos() - (middle-13000)) >= 20:
         print("tracking y")
         axis_0.set_pos_trap(middle)
 
-    axis_1.home_with_vel(5000, -1)
-    while abs(axis_1.get_pos() - middle) >= 10:
+    axis_1.home_with_vel(10000, -1)
+    while abs(axis_1.get_pos() - middle) >= 20:
         print("tracking x")
         axis_1.set_pos_trap(middle)
 
@@ -73,14 +73,16 @@ def home(length_of_track):
 if __name__ == '__main__':
     axis_1.clear_errors()
     axis_0.clear_errors()
+    axis_0.set_calibration_current(10)
+    axis_1.set_calibration_current(10)
     axis_0.calibrate()
     axis_1.calibrate()
     home(130000)
     print(axis_1.zero, " ", axis_0.zero)
     print(axis_1.get_pos(), " ", axis_0.get_pos())
 
-    axis_0.set_curr_limit(30)
-    axis_1.set_curr_limit(30)
+    axis_0.set_curr_limit(40)
+    axis_1.set_curr_limit(40)
 
     full_length = 112816  # axis1
     middle_x = full_length / 2
@@ -102,6 +104,7 @@ if __name__ == '__main__':
             run_x_axis()
             run_y_axis()
 
+
             if joystick.button_combo_check([3]):
                 trajectory_mode(middle_x, middle_y)
 
@@ -110,6 +113,7 @@ if __name__ == '__main__':
                 print("velocity: ", axis_1.get_vel(), " y: ", axis_0.get_vel())
                 print("current: ", axis_1.get_current(), " y: ", axis_0.get_current())
                 sleep(.2)
+
 
     except KeyboardInterrupt:
         axis_1.idle()
